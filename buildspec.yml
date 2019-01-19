@@ -4,6 +4,9 @@ phases:
   install:
     commands:
       - pipenv install
+  pre_build:
+    commands:
+      - export VIRTUAL_ENV=$(pipenv --venv)
   build:
     commands:
       - pipenv run zappa update
