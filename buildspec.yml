@@ -1,6 +1,12 @@
 version: 0.1
 
 phases:
+  install:
+    commands:
+      - pipenv install
+  pre_build:
+    commands:
+      - pipenv shell
   build:
     commands:
-      - echo Build started!
+      - zappa update
