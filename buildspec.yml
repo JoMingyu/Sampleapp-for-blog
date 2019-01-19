@@ -4,9 +4,6 @@ phases:
   install:
     commands:
       - pipenv install
-  pre_build:
-    commands:
-      - pipenv shell
   build:
     commands:
-      - zappa update
+      - pipenv run zappa update
