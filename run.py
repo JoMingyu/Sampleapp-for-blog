@@ -1,12 +1,12 @@
-from sanic import Sanic
-from sanic.response import text
+from flask import Flask
 
-app = Sanic(__name__)
+app = Flask(__name__)
 
 
 @app.route('/')
-async def index(request):
-    return text('Hello World')
+def index():
+    return 'Hello World'
+
 
 if __name__ == '__main__':
     app.run()
