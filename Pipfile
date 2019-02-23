@@ -8,6 +8,13 @@ verify_ssl = true
 [packages]
 flask = "*"
 zappa = "*"
+schematics = "*"
+sqlalchemy = "*"
+mysqlclient = "*"
+arrow = "*"
+flask-jwt-extended = "*"
+flask-restful = "*"
+termcolor = "*"
 
 [requires]
 python_version = "3.6"
