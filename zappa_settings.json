@@ -1,6 +1,6 @@
 {
     "dev": {
-        "app_function": "run.app",
+        "app_function": "production_app.application",
         "aws_region": "ap-northeast-2",
         "project_name": "blog-sampleapp",
         "runtime": "python3.6",
