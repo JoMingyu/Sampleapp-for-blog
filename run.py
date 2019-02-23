@@ -1,12 +1,9 @@
-from flask import Flask
+from app import create_app
+from config.app_config import LocalLevelConfig
+from config.db_config import LocalDBConfig
+from constants.local_run import RUN_SETTING
 
-app = Flask(__name__)
-
-
-@app.route('/')
-def index():
-    return 'This is version 2'
-
+app = create_app(LocalLevelConfig, LocalDBConfig)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(**RUN_SETTING)
