@@ -5,9 +5,7 @@ from app.misc.log import log
 
 
 def register_extensions(flask_app: Flask):
-    from app import extensions
-
-    extensions.cors.init_app(flask_app)
+    pass
 
 
 def register_views(flask_app: Flask):
