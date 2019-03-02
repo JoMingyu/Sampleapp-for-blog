@@ -6,7 +6,9 @@ from app.misc.log import log
 
 
 def register_extensions(flask_app: Flask):
-    pass
+    from app.extensions import main_db
+
+    main_db.init_app(flask_app)
 
 
 def register_views(flask_app: Flask):
