@@ -1,18 +1,14 @@
-from flask import current_app, request
+from flask import g
 
 
 class _ContextProperty:
     @property
-    def secret_key(self) -> str:
-        return current_app.secret_key
+    def request_payload_object(self):
+        return g.request_payload_object
 
-    @property
-    def user_agent(self) -> str:
-        return request.headers['user_agent']
-
-    @property
-    def remote_addr(self) -> str:
-        return request.remote_addr
+    @request_payload_object.setter
+    def request_payload_object(self, value):
+        g.request_payload_object = value
 
 
 context_property = _ContextProperty()
