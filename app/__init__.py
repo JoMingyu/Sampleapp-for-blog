@@ -6,8 +6,9 @@ from app.misc.log import log
 
 
 def register_extensions(flask_app: Flask):
-    from app.extensions import main_db
+    from app.extensions import jwt, main_db
 
+    jwt.init_app(flask_app)
     main_db.init_app(flask_app)
 
 
