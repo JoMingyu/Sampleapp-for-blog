@@ -3,7 +3,7 @@ from flask_restful import Api
 
 
 def route(flask_app: Flask):
-    from app.views.sample import sample
+    from app.views.user.account import auth, check_duplicate, refresh, signup, verify
 
     handle_exception_func = flask_app.handle_exception
     handle_user_exception_func = flask_app.handle_user_exception
@@ -12,11 +12,14 @@ def route(flask_app: Flask):
     # 따라서 두 함수를 임시 저장해 두고, register_blueprint 이후 함수를 재할당하도록 함
 
     # - blueprint, api object initialize
-    api_v1_blueprint = Blueprint('api_v1', __name__, url_prefix='/api/v1')
-    api_v1 = Api(api_v1_blueprint)
+    api_v1_blueprint = Blueprint('api_v1', __name__)
+    api_user__account = Api(api_v1_blueprint, prefix='/user/account')
 
     # - route
-    api_v1.add_resource(sample.Sample, '/sample')
+    api_user__account.add_resource(check_duplicate.IDDuplicateCheckAPI, '/check-duplicate/id/<id>')
+    api_user__account.add_resource(signup.SignupAPI, '/signup')
+    api_user__account.add_resource(auth.AuthAPI, '/auth')
+    api_user__account.add_resource(refresh.RefreshAPI, '/refresh')
 
     # - register blueprint
     flask_app.register_blueprint(api_v1_blueprint)
