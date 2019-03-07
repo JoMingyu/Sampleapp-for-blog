@@ -1,6 +1,6 @@
 from flask import abort
 from flask_jwt_extended import create_access_token, create_refresh_token
-from schematics.types import EmailType, StringType
+from schematics.types import StringType
 from werkzeug.security import check_password_hash
 
 from app.context import context_property
