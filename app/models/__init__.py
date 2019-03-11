@@ -14,16 +14,26 @@ class Base(_Base):
     __abstract__ = True
 
     @classmethod
-    def get_first_without_none_check(cls, read_session: Session, where_clause: Union[ClauseElement, bool]):
+    def get_all(cls, read_session: Session, where_clause: Union[ClauseElement, bool]=True):
         """
-        전달된 session을 통해 cls에 대해 where_caluse로 필터해 쿼리하고, None 여부에 상관없이 .first()의 결과를 리턴합니다.
+        전달된 session을 통해 cls에 대해 where_clause로 필터해 쿼리하고, .all()의 결과를 반환합니다.
+        """
+        return read_session.query(cls).filter(where_clause).all()
+
+    @classmethod
+    def get_first_without_none_check(cls, read_session: Session, where_clause: Union[ClauseElement, bool]=True):
+        """
+        전달된 session을 통해 cls에 대해 where_clause로 필터해 쿼리하고, None 여부에 상관없이 .first()의 결과를 리턴합니다.
         """
         return read_session.query(cls).filter(where_clause).first()
 
     @classmethod
-    def get_first_or_abort_on_none(cls, read_session: Session, where_clause: Union[ClauseElement, bool], code=404, message: str=None):
+    def get_first_or_abort_on_none(
+            cls, read_session: Session, where_clause: Union[ClauseElement, bool]=True,
+            code: int=404, message: str=None
+    ):
         """
-        1. 전달된 session을 통해 cls에 대해 where_caluse로 필터해 쿼리하고
+        1. 전달된 session을 통해 cls에 대해 where_clause로 필터해 쿼리하고
         2. .first() 후 결과가 None이면 인자 정보들을 통해 abort,
         3. None이 아니라면 해당 객체를 리턴
         """
@@ -35,7 +45,7 @@ class Base(_Base):
             return res
 
     @classmethod
-    def delete(cls, write_session: Session, where_clause: Union[ClauseElement, bool]):
+    def delete(cls, write_session: Session, where_clause: Union[ClauseElement, bool]=True):
         """
         전달된 session을 통해 cls에 대해 where_clause로 필터해 쿼리하고, 결과를 모두 delete합니다.
         commit을 수행하지 않음에 주의하기 바랍니다.
@@ -43,7 +53,7 @@ class Base(_Base):
         write_session.query(cls).filter(where_clause).delete()
 
     @classmethod
-    def delete_and_commit(cls, write_session: Session, where_clause: Union[ClauseElement, bool]):
+    def delete_and_commit(cls, write_session: Session, where_clause: Union[ClauseElement, bool]=True):
         """
         where_clause를 통해 delete 후, commit까지 수행합니다.
         """

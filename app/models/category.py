@@ -13,3 +13,10 @@ class TblCategories(Base):
     author_id = Column(String(256), ForeignKey('tbl_users.id'))
 
     author = relationship('TblUsers')
+
+    @property
+    def json(self):
+        return {
+            'id': self.id,
+            'name': self.name
+        }
