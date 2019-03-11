@@ -1,3 +1,4 @@
+from abc import abstractmethod
 from enum import Enum
 from functools import wraps
 from typing import Type
@@ -14,8 +15,9 @@ class PayloadLocation(Enum):
 
 
 class BaseModel(Model):
+    @abstractmethod
     def validate_additional(self):
-        raise NotImplementedError  # For abstract method
+        pass
 
 
 def validate_with_schematics(validation_target: PayloadLocation, model: Type[BaseModel]):
