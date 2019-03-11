@@ -1,7 +1,6 @@
-from flask_jwt_extended import jwt_refresh_token_required, create_access_token, get_jwt_identity
+from flask_jwt_extended import jwt_refresh_token_required, create_access_token
 
-from app.extensions import main_db
-from app.models.user import TblUsers
+from app.context import context_property
 from app.views.base import BaseResource
 
 
@@ -11,15 +10,7 @@ class RefreshAPI(BaseResource):
         """
         Access token refresh API
         """
-
-        session = main_db.session
-        identity = get_jwt_identity()
-
-        user: TblUsers = TblUsers.get_first_or_abort_on_none(
-            session,
-            TblUsers.id == identity,
-            code=401
-        )
+        user = context_property.requested_user
 
         return {
             'accessToken': create_access_token(user.id)
