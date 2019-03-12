@@ -11,7 +11,9 @@ def schematics_baseerror_handler(e: BaseError):
 
 
 def http_exception_handler(e: HTTPException):
-    return '', e.code
+    return jsonify({
+        'msg': e.description
+    }), e.code
 
 
 def broad_exception_handler(e: Exception):
