@@ -14,30 +14,66 @@ class Base(_Base):
     __abstract__ = True
 
     @classmethod
-    def get_all(cls, read_session: Session, where_clause: Union[ClauseElement, bool]=True):
-        """
-        전달된 session을 통해 cls에 대해 where_clause로 필터해 쿼리하고, .all()의 결과를 반환합니다.
-        """
-        return read_session.query(cls).filter(where_clause).all()
+    def _build_query(
+        cls, session: Session, where_clause=None, order_by=None
+    ):
+        query = session.query(cls)
+
+        if where_clause is not None:
+            query = query.filter(where_clause)
+
+        if order_by is not None:
+            query = query.order_by(order_by)
+
+        return query
 
     @classmethod
-    def get_first_without_none_check(cls, read_session: Session, where_clause: Union[ClauseElement, bool]=True):
+    def get_all(
+        cls, read_session: Session, where_clause: Union[ClauseElement, bool]=None, order_by: ClauseElement=None
+    ):
         """
-        전달된 session을 통해 cls에 대해 where_clause로 필터해 쿼리하고, None 여부에 상관없이 .first()의 결과를 리턴합니다.
+        전달된 인자들을 통해 쿼리를 생성하고, .all()의 결과를 반환합니다.
+
+        :param read_session: SQLAlchemy session
+        :param where_clause: 적용할 where clause
+        :param order_by: 적용할 order by clause
         """
-        return read_session.query(cls).filter(where_clause).first()
+        query = cls._build_query(read_session, where_clause, order_by)
+
+        return query.all()
+
+    @classmethod
+    def get_first_without_none_check(
+        cls, read_session: Session, where_clause: Union[ClauseElement, bool]=True, order_by: ClauseElement=None
+    ):
+        """
+        전달된 인자들을 통해 쿼리를 생성하고, None 여부에 상관없이 .first()의 결과를 리턴합니다.
+
+        :param read_session: SQLAlchemy session
+        :param where_clause: 적용할 where clause
+        :param order_by: 적용할 order by clause
+        """
+        query = cls._build_query(read_session, where_clause, order_by)
+
+        return query.first()
 
     @classmethod
     def get_first_or_abort_on_none(
-            cls, read_session: Session, where_clause: Union[ClauseElement, bool]=True,
-            code: int=404, message: str=None
+        cls, read_session: Session, where_clause: Union[ClauseElement, bool]=True, order_by: ClauseElement=None,
+        code: int=404, message: str=None
     ):
         """
-        1. 전달된 session을 통해 cls에 대해 where_clause로 필터해 쿼리하고
+        1. 전달된 인자들을 통해 쿼리를 생성하고
         2. .first() 후 결과가 None이면 인자 정보들을 통해 abort,
         3. None이 아니라면 해당 객체를 리턴
+
+        :param read_session: SQLAlchemy session
+        :param where_clause: 적용할 where clause
+        :param order_by: 적용할 order by clause
+        :param code: .first()의 결과가 None인 경우 abort할 코드
+        :param message: .first()의 결과가 None인 경우 abort할 때 사용할 메시지
         """
-        res = cls.get_first_without_none_check(read_session, where_clause)
+        res = cls.get_first_without_none_check(read_session, where_clause, order_by)
 
         if res is None:
             abort(code, message)
@@ -45,7 +81,9 @@ class Base(_Base):
             return res
 
     @classmethod
-    def delete(cls, write_session: Session, where_clause: Union[ClauseElement, bool]=True):
+    def delete(
+        cls, write_session: Session, where_clause: Union[ClauseElement, bool]=True
+    ):
         """
         전달된 session을 통해 cls에 대해 where_clause로 필터해 쿼리하고, 결과를 모두 delete합니다.
         commit을 수행하지 않음에 주의하기 바랍니다.
@@ -53,7 +91,9 @@ class Base(_Base):
         write_session.query(cls).filter(where_clause).delete()
 
     @classmethod
-    def delete_and_commit(cls, write_session: Session, where_clause: Union[ClauseElement, bool]=True):
+    def delete_and_commit(
+        cls, write_session: Session, where_clause: Union[ClauseElement, bool]=True
+    ):
         """
         where_clause를 통해 delete 후, commit까지 수행합니다.
         """
