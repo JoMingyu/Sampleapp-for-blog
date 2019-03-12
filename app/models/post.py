@@ -15,3 +15,11 @@ class TblPosts(Base):
 
     owner = relationship('TblUsers')
     category = relationship('TblCategories')
+
+    @property
+    def json_for_list(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'ownerNickname': self.owner.nickname
+        }
