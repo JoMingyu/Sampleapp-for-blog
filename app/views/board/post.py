@@ -80,3 +80,51 @@ class PostAPI(BaseResource):
                 post.json_for_list for post in TblPosts.get_all(session, TblPosts.category_id == payload.category_id)
             ]
         }
+
+
+class PostItemAPI(BaseResource):
+    class Schema:
+        class Patch(BaseModel):
+            title = PostAPI.Schema.Post.title
+            content = PostAPI.Schema.Post.content
+
+    def get(self, post_id):
+        """
+        게시글 내용 조회 API
+        """
+
+        session = main_db.session
+
+        post = TblPosts.get_post_object_through_id(session, post_id)
+
+        return {
+            'data': post.json_for_detail
+        }
+
+    @validate_with_schematics(PayloadLocation.JSON, Schema.Patch)
+    @jwt_required
+    def patch(self, post_id):
+        """
+        게시글 수정 API
+        """
+
+        payload: self.Schema.Patch = context_property.request_payload_object
+        session = main_db.session
+        user = context_property.requested_user
+
+        TblPosts.update_post_with_permission_check(session, post_id, user, payload.title, payload.content)
+
+        return {}
+
+    @jwt_required
+    def delete(self, post_id):
+        """
+        게시글 삭제 API
+        """
+
+        session = main_db.session
+        user = context_property.requested_user
+
+        TblPosts.delete_post_with_permission_check(session, post_id, user)
+
+        return {}

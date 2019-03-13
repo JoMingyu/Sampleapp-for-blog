@@ -25,6 +25,7 @@ def route(flask_app: Flask):
 
     api_user__board.add_resource(category.CategoryAPI, '/categories')
     api_user__board.add_resource(post.PostAPI, '/posts')
+    api_user__board.add_resource(post.PostItemAPI, '/posts/<int:post_id>')
 
     # - register blueprint
     flask_app.register_blueprint(api_v1_blueprint)
