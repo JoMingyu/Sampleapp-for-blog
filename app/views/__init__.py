@@ -4,7 +4,7 @@ from flask_restful import Api
 
 def route(flask_app: Flask):
     from app.views.user.account import auth, check_duplicate, refresh, signup
-    from app.views.board import category, post
+    from app.views.board import category, post, comment
 
     handle_exception_func = flask_app.handle_exception
     handle_user_exception_func = flask_app.handle_user_exception
@@ -26,6 +26,7 @@ def route(flask_app: Flask):
     api_user__board.add_resource(category.CategoryAPI, '/categories')
     api_user__board.add_resource(post.PostAPI, '/posts')
     api_user__board.add_resource(post.PostItemAPI, '/posts/<int:post_id>')
+    api_user__board.add_resource(comment.CommentAPI, '/posts/<int:post_id>/comments')
 
     # - register blueprint
     flask_app.register_blueprint(api_v1_blueprint)
