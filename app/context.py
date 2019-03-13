@@ -26,7 +26,7 @@ class _ContextProperty:
             user = TblUsers.get_first_or_abort_on_none(
                 session,
                 TblUsers.id == get_jwt_identity(),
-                401
+                code=401
             )
 
             g.requested_user = user

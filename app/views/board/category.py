@@ -15,7 +15,8 @@ class CategoryAPI(BaseResource):
         class Post(BaseModel):
             name = StringType(
                 serialized_name='name',
-                required=True
+                required=True,
+                max_length=TblCategories.name.type.length
             )
 
     @validate_with_schematics(PayloadLocation.JSON, Schema.Post)
