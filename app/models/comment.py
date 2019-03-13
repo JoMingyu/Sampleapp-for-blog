@@ -14,3 +14,10 @@ class TblComments(Base):
 
     owner = relationship('TblUsers')
     post = relationship('TblPosts')
+
+    @property
+    def json(self):
+        return {
+            'id': self.id,
+            'content': self.content
+        }
