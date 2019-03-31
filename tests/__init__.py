@@ -17,8 +17,8 @@ class BaseTest(TestCase):
             app_config.LocalLevelConfig,
             db_config.LocalDBConfig
         )
-
         cls.client = cls.app.test_client()
+
         cls.session = main_db.checkout_new_session()
 
         cls.method = 'GET'
