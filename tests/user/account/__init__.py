@@ -30,6 +30,9 @@ class JWTRelatedTestBase(BaseTest):
         self.assertEqual('refresh', refresh_token_payload['type'])
         self.assertEqual(expected_identity, refresh_token_payload['identity'])
 
-    def validate_jwt_token(self, access_token: str, refresh_token: str, secret_key: str, expected_identity: str):
+    def validate_jwt_token(self, access_token: str, refresh_token: str):
+        secret_key = self.app.secret_key
+        expected_identity = self.mock_object.id
+
         self._validate_access_token(access_token, secret_key, expected_identity)
         self._validate_refresh_token(refresh_token, secret_key, expected_identity)

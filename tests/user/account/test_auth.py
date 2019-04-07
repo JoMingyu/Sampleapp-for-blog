@@ -18,12 +18,7 @@ class TestAuthAPI(JWTRelatedTestBase):
         self.assertEqual(201, resp.status_code)
 
         payload = resp.json
-        self.validate_jwt_token(
-            payload['accessToken'],
-            payload['refreshToken'],
-            self.app.secret_key,
-            self.json['id']
-        )
+        self.validate_jwt_token(payload['accessToken'], payload['refreshToken'])
 
     def test_invalid_id(self):
         """
