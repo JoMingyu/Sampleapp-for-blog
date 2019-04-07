@@ -1,8 +1,3 @@
-from werkzeug.security import generate_password_hash
-
-from app.models.user import TblUsers
-from app.views.user.account.signup import SignupAPI
-
 from tests.user.account import JWTRelatedTestBase
 
 
@@ -12,15 +7,6 @@ class TestAuthAPI(JWTRelatedTestBase):
 
         self.method = 'POST'
         self.path = '/user/account/auth'
-
-        self.mock_object = SignupAPI.Schema.Post.get_mock_object()
-        with self.app.test_request_context():
-            self.session.add(TblUsers(
-                id=self.mock_object.id,
-                password=generate_password_hash(self.mock_object.password),
-                nickname=self.mock_object.nickname
-            ))
-            self.session.commit()
 
     def test_happypath(self):
         self.json = {

@@ -25,6 +25,7 @@ class BaseTest(TestCase):
         cls.path = None
         cls.path_parameters = dict()
 
+        cls.headers = dict()
         cls.json = dict()
         cls.query_string = dict()
 
@@ -33,6 +34,12 @@ class BaseTest(TestCase):
 
     def tearDown(self):
         Base.metadata.drop_all(main_db.engine)
+
+    def escape_jwt_prefix(self, token: str):
+        return token.lstrip('JWT ')
+
+    def set_authorization_header_jwt(self, token: str):
+        self.headers['Authorization'] = 'JWT {}'.format(self.escape_jwt_prefix(token))
 
     def request(self) -> ResponseBase:
         return self.client.open(
