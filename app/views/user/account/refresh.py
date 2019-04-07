@@ -14,4 +14,4 @@ class RefreshAPI(BaseResource):
 
         return {
             'accessToken': create_access_token(user.id)
-        }, 201
+        }, 200
