@@ -1,4 +1,3 @@
-from app.models.user import TblUsers
 from app.views.user.account.signup import SignupAPI
 
 from tests import BaseTest
@@ -10,10 +9,9 @@ class TestSignupAPI(BaseTest):
 
         self.method = 'POST'
         self.path = '/user/account/signup'
-        self.mock_object = SignupAPI.Schema.Post.get_mock_object()
-        self.json = self.mock_object.to_primitive()
 
     def test_happypath(self):
+        self.json = SignupAPI.Schema.Post.get_mock_object().mock_object.to_primitive()
         resp = self.request()
 
         self.assertEqual(201, resp.status_code)
@@ -22,13 +20,7 @@ class TestSignupAPI(BaseTest):
         # TODO
 
     def test_id_duplicate(self):
-        self.session.add(TblUsers(
-            id=self.mock_object.id,
-            password=self.mock_object.password,
-            nickname=self.mock_object.nickname
-        ))
-
-        self.session.commit()
+        self.json = self.test_user_model.to_primitive()
 
         resp = self.request()
 

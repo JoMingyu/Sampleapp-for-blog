@@ -42,7 +42,7 @@ class CategoryAPI(BaseResource):
 
             return {
                 'id': category.id
-            }
+            }, 201
         except IntegrityError:
             abort(409)
 

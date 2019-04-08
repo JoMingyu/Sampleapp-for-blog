@@ -1,9 +1,9 @@
 from flask_jwt_extended import create_access_token, create_refresh_token
 
-from tests.user.account import JWTRelatedTestBase
+from tests.user.account import JWTRelatedTest
 
 
-class TestRefreshAPI(JWTRelatedTestBase):
+class TestRefreshAPI(JWTRelatedTest):
     def setUp(self):
         super(TestRefreshAPI, self).setUp()
 
@@ -11,8 +11,8 @@ class TestRefreshAPI(JWTRelatedTestBase):
         self.path = '/user/account/refresh'
 
         with self.app.test_request_context():
-            self.access_token = create_access_token(self.mock_object.id)
-            self.refresh_token = create_refresh_token(self.mock_object.id)
+            self.access_token = create_access_token(self.test_user_model.id)
+            self.refresh_token = create_refresh_token(self.test_user_model.id)
 
     def test_happypath(self):
         self.set_authorization_header_jwt(self.refresh_token)
@@ -24,7 +24,7 @@ class TestRefreshAPI(JWTRelatedTestBase):
         self._validate_access_token(
             payload['accessToken'],
             self.app.secret_key,
-            self.mock_object.id
+            self.test_user_model.id
         )
 
     def test_refresh_with_access_token(self):
