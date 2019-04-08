@@ -3,10 +3,13 @@ from string import printable
 from unittest import TestCase
 
 from flask.wrappers import ResponseBase
+from werkzeug.security import generate_password_hash
 
 from app import create_app
 from app.extensions import main_db
 from app.models import Base
+from app.models.user import TblUsers
+from app.views.user.account.signup import SignupAPI
 from config import app_config, db_config
 
 
@@ -31,6 +34,17 @@ class BaseTest(TestCase):
 
     def setUp(self):
         Base.metadata.create_all(main_db.engine)
+
+        with self.app.test_request_context():
+            self.test_user_model = SignupAPI.Schema.Post.get_mock_object()
+            self.test_user = TblUsers(
+                id=self.test_user_model.id,
+                password=generate_password_hash(self.test_user_model.password),
+                nickname=self.test_user_model.nickname
+            )
+
+        self.session.add(self.test_user)
+        self.session.commit()
 
     def tearDown(self):
         Base.metadata.drop_all(main_db.engine)

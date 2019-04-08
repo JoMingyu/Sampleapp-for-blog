@@ -1,7 +1,7 @@
-from tests.user.account import JWTRelatedTestBase
+from tests.user.account import JWTRelatedTest
 
 
-class TestAuthAPI(JWTRelatedTestBase):
+class TestAuthAPI(JWTRelatedTest):
     def setUp(self):
         super(TestAuthAPI, self).setUp()
 
@@ -10,23 +10,26 @@ class TestAuthAPI(JWTRelatedTestBase):
 
     def test_happypath(self):
         self.json = {
-            'id': self.mock_object.id,
-            'password': self.mock_object.password
+            'id': self.test_user_model.id,
+            'password': self.test_user_model.password
         }
 
         resp = self.request()
         self.assertEqual(201, resp.status_code)
 
         payload = resp.json
-        self.validate_jwt_token(payload['accessToken'], payload['refreshToken'])
+        self.validate_jwt_token(
+            payload['accessToken'],
+            payload['refreshToken']
+        )
 
     def test_invalid_id(self):
         """
         ID가 틀린 경우
         """
         self.json = {
-            'id': self.mock_object.id + '!',
-            'password': self.mock_object.password
+            'id': self.test_user_model.id + '!',
+            'password': self.test_user_model.password
         }
 
         resp = self.request()
@@ -37,8 +40,8 @@ class TestAuthAPI(JWTRelatedTestBase):
         비밀번호가 틀린 경우
         """
         self.json = {
-            'id': self.mock_object.id,
-            'password': self.mock_object.password + '!'
+            'id': self.test_user_model.id,
+            'password': self.test_user_model.password + '!'
         }
 
         resp = self.request()
