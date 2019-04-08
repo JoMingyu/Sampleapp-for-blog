@@ -3,6 +3,7 @@ from string import printable
 from unittest import TestCase
 
 from flask.wrappers import ResponseBase
+from flask_jwt_extended import create_access_token
 from werkzeug.security import generate_password_hash
 
 from app import create_app
@@ -37,13 +38,13 @@ class BaseTest(TestCase):
 
         with self.app.test_request_context():
             self.test_user_model = SignupAPI.Schema.Post.get_mock_object()
-            self.test_user = TblUsers(
-                id=self.test_user_model.id,
-                password=generate_password_hash(self.test_user_model.password),
-                nickname=self.test_user_model.nickname
-            )
+            self.test_user_access_token = create_access_token(self.test_user_model.id)
 
-        self.session.add(self.test_user)
+        self.session.add(TblUsers(
+            id=self.test_user_model.id,
+            password=generate_password_hash(self.test_user_model.password),
+            nickname=self.test_user_model.nickname
+        ))
         self.session.commit()
 
     def tearDown(self):
