@@ -6,6 +6,7 @@ phases:
       - pipenv install
   pre_build:
     commands:
+      - pipenv run python -m unittest discover tests
       - export VIRTUAL_ENV=$(pipenv --venv)
   build:
     commands:
