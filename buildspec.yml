@@ -4,7 +4,7 @@ phases:
   install:
     commands:
       - pipenv install
-      - docker run -d -p 3306:3306 mysql
+      - docker run -d -e MYSQL_ROOT_PASSWORD=toor -p 3306:3306 mysql
   pre_build:
     commands:
       - pipenv run python -m unittest discover tests
