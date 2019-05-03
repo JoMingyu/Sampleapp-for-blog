@@ -5,7 +5,7 @@ DB_NAME = 'stay'
 
 
 class LocalDBConfig:
-    MAIN_DB_URL = 'mysql+mysqldb://root@localhost:3306/{}?charset=utf8mb4'.format(
+    MAIN_DB_URL = 'mysql+mysqldb://root:toor@localhost:3306/{}?charset=utf8mb4'.format(
         DB_NAME
     )
 
